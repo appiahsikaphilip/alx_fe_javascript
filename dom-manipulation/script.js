@@ -1,30 +1,76 @@
-cd ~/alx_fe_javascript/dom-manipulation
+// Initialize quotes array (load from localStorage if available)
+let quotes = JSON.parse(localStorage.getItem('quotes')) || [
+  { text: "The best way to get started is to quit talking and begin doing.", category: "Motivation" },
+  { text: "Life is what happens when you’re busy making other plans.", category: "Life" },
+  { text: "Success is not in what you have, but who you are.", category: "Success" }
+];
 
-echo "=== FINAL VERIFICATION REPORT ===" > verification_report.txt
-echo "" >> verification_report.txt
+// DOM references
+const quoteDisplay = document.getElementById('quoteDisplay');
+const categoryFilter = document.getElementById('categoryFilter');
 
-echo "1. FILE EXISTENCE:" >> verification_report.txt
-ls -lh index.html script.js >> verification_report.txt 2>&1
-echo "" >> verification_report.txt
+// Show a random quote
+function showRandomQuote() {
+  const selectedCategory = categoryFilter.value;
+  let filteredQuotes = quotes;
 
-echo "2. POPULATE CATEGORIES FUNCTION:" >> verification_report.txt
-grep -n "function populateCategories" script.js >> verification_report.txt
-echo "" >> verification_report.txt
+  if (selectedCategory !== "all") {
+    filteredQuotes = quotes.filter(q => q.category === selectedCategory);
+  }
 
-echo "3. FILTER QUOTES FUNCTION:" >> verification_report.txt
-grep -n "function filterQuotes" script.js >> verification_report.txt
-echo "" >> verification_report.txt
+  const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+  const randomQuote = filteredQuotes[randomIndex];
 
-echo "4. SAVE CATEGORY FUNCTION:" >> verification_report.txt
-grep -n "function saveSelectedCategory" script.js >> verification_report.txt
-echo "" >> verification_report.txt
+  quoteDisplay.textContent = randomQuote ? randomQuote.text : "No quotes available in this category.";
+}
 
-echo "5. LOAD CATEGORY FUNCTION:" >> verification_report.txt
-grep -n "function loadSelectedCategory" script.js >> verification_report.txt
-echo "" >> verification_report.txt
+// Populate unique categories into dropdown
+function populateCategories() {
+  const categories = [...new Set(quotes.map(q => q.category))]; // uses map()
+  categoryFilter.innerHTML = '<option value="all">All Categories</option>';
 
-echo "6. CATEGORY FILTER IN HTML:" >> verification_report.txt
-grep -n "categoryFilter" index.html >> verification_report.txt
-echo "" >> verification_report.txt
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categoryFilter.appendChild(option); // uses appendChild()
+  });
 
-cat verification_report.txt
+  // Restore last selected category from localStorage
+  const savedCategory = localStorage.getItem('selectedCategory');
+  if (savedCategory) {
+    categoryFilter.value = savedCategory;
+  }
+}
+
+// Filter quotes based on selected category
+function filterQuotes() {
+  const selectedCategory = categoryFilter.value;
+  localStorage.setItem('selectedCategory', selectedCategory);
+  showRandomQuote();
+}
+
+// Add new quote
+function addQuote() {
+  const newText = document.getElementById('newQuoteText').value.trim();
+  const newCategory = document.getElementById('newQuoteCategory').value.trim();
+
+  if (newText && newCategory) {
+    quotes.push({ text: newText, category: newCategory });
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+    populateCategories();
+    showRandomQuote();
+    document.getElementById('newQuoteText').value = '';
+    document.getElementById('newQuoteCategory').value = '';
+  } else {
+    alert("Please enter both a quote and category.");
+  }
+}
+
+// Event listener for showing random quote
+document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+
+// Initialize app
+populateCategories();
+showRandomQuote();
+

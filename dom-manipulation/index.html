@@ -1,158 +1,31 @@
-cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    
-    h1 {
-      color: #333;
-      text-align: center;
-    }
-    
-    #quoteDisplay {
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin: 20px 0;
-      min-height: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .quote-text {
-      font-size: 1.3em;
-      font-style: italic;
-      color: #555;
-      margin-bottom: 10px;
-    }
-    
-    .quote-category {
-      font-size: 0.9em;
-      color: #888;
-      text-align: right;
-    }
-    
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin: 5px;
-    }
-    
-    button:hover {
-      background-color: #45a049;
-    }
-    
-    button.export-btn {
-      background-color: #2196F3;
-    }
-    
-    button.export-btn:hover {
-      background-color: #0b7dda;
-    }
-    
-    button.test-btn {
-      background-color: #ff9800;
-    }
-    
-    button.test-btn:hover {
-      background-color: #e68900;
-    }
-    
-    .add-quote-form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-top: 20px;
-    }
-    
-    .import-export-section {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-top: 20px;
-      text-align: center;
-    }
-    
-    input[type="text"] {
-      width: calc(50% - 10px);
-      padding: 10px;
-      margin: 5px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-    
-    input[type="file"] {
-      margin: 10px;
-      padding: 10px;
-    }
-    
-    .button-container {
-      text-align: center;
-      margin: 20px 0;
-    }
-    
-    h2 {
-      color: #333;
-      margin-top: 0;
-    }
-    
-    .session-info {
-      background-color: #fff3cd;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-      font-size: 0.9em;
-      color: #856404;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Quote Generator with Filter</title>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
-  
-  <div class="session-info" id="sessionInfo"></div>
-  
+
+  <!-- Filter Dropdown -->
+  <label for="categoryFilter">Filter by Category:</label>
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+  </select>
+
+  <!-- Quote Display -->
   <div id="quoteDisplay"></div>
-  
-  <div class="button-container">
-    <button id="newQuote">Show New Quote</button>
+  <button id="newQuote">Show New Quote</button>
+
+  <!-- Add Quote Section -->
+  <div>
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button onclick="addQuote()">Add Quote</button>
   </div>
-  
-  <div class="import-export-section">
-    <h2>Import/Export Quotes</h2>
-    <div>
-      <button class="export-btn" onclick="exportToJsonFile()">Export Quotes to JSON</button>
-    </div>
-    <div style="margin-top: 15px;">
-      <label for="importFile" style="display: block; margin-bottom: 5px;">Import Quotes from JSON:</label>
-      <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
-    </div>
-    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-      <h3>Testing Tools</h3>
-      <button class="test-btn" onclick="loadTestQuotes()">Load Test Quotes</button>
-    </div>
-  </div>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
-EOF
+
