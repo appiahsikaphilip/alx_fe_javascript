@@ -1,0 +1,16 @@
+cat > test-quotes.json << 'EOF'
+[
+  {
+    "text": "Code is like humor. When you have to explain it, it's bad.",
+    "category": "Programming"
+  },
+  {
+    "text": "First, solve the problem. Then, write the code.",
+    "category": "Programming"
+  },
+  {
+    "text": "The best error message is the one that never shows up.",
+    "category": "Development"
+  }
+]
+EOF
